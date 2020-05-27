@@ -14,38 +14,39 @@ namespace SortSøndagDL {
     public class Episode {
         private XmlNode xmlNode;
 
-        public string BtnName { get; }
+        private string BtnName { get; }
         private string Title { get; }
         private string DownloadUrl { get; }
         private string PubDate { get; }
-        public string DT_date { get; }
+        private string DT_date { get; }
         private MainWindow mainWindow;
         ProgressBar pg;
         Button epBtn;
         Button DLBtn;
 
         public Episode(MainWindow mainWindow, XmlNode xmlNode, int id) {
+            // Set Variables
             this.mainWindow = mainWindow;
             this.xmlNode = xmlNode;
-
             BtnName = "dlep" + id.ToString();
             Title = this.xmlNode.SelectSingleNode("title").InnerText;
             DownloadUrl = this.xmlNode.SelectSingleNode("enclosure/@url").InnerText;
             PubDate = this.xmlNode.SelectSingleNode("pubDate").InnerText;
             DT_date = DateTime.Parse(PubDate).ToString("dd-mm-yyy");
-            mainWindow.text.Text += "btn created\n";
 
-            addEpisodeBtn();
+            AddEpisodeButton();
         }
 
-        public void addEpisodeBtn() {
+        private void AddEpisodeButton() {
+            //Add episode button to window
             epBtn = new Button {
                 Content = DT_date,
                 Name = BtnName
             };
-            epBtn.Click += new RoutedEventHandler(DLBtn_Click);
+            epBtn.Click += new RoutedEventHandler(_DLBtn_Click);
             mainWindow.SP_eps.Children.Add(epBtn);
 
+            // Add progess Bar to window, Initially hidden
             pg = new ProgressBar {
                 Name = BtnName + "pgb"
             };
@@ -53,23 +54,23 @@ namespace SortSøndagDL {
             pg.Height = 0;
             mainWindow.SP_epCtrls.Children.Add(pg);
 
+            //Add Download Button to window
             DLBtn = new Button {
                 Content = "Download Udsendelse",
                 Name = "Downloadep"
             };
-            DLBtn.Click += new RoutedEventHandler(dlLink);
+            DLBtn.Click += new RoutedEventHandler(DownloadLinkEventHandler);
 
             mainWindow.SP_epCtrls.Children.Add(DLBtn);
         }
 
-        public void DLBtn_Click(object sender, RoutedEventArgs e) {
-            //string btnName = (sender as Button).Name;
+        private void _DLBtn_Click(object sender, RoutedEventArgs e) {
             mainWindow.text.Text += (string.Format("You clicked on the {0}. button. \n", BtnName));
             mainWindow.text.Text = Title + "\n";
             mainWindow.text.Text += DownloadUrl + "\n";
         }
 
-        private void dlLink(object sender, RoutedEventArgs e) {
+        private void DownloadLinkEventHandler(object sender, RoutedEventArgs e) {
             mainWindow.text.Text = "download " + DownloadUrl;
             using (WebClient wc = new WebClient()) {
                 string dlP = mainWindow.DlPath + @"\" + DT_date + ".mp3";
@@ -78,17 +79,17 @@ namespace SortSøndagDL {
                 pg.Height = 20;
                 DLBtn.Height = 0;
 
-                wc.DownloadProgressChanged += wc_DownloadProgressChanged;
+                wc.DownloadProgressChanged += Wc_DownloadProgressChanged;
                 wc.DownloadFileAsync(new System.Uri(DownloadUrl), dlP);
-                wc.DownloadFileCompleted += wc_Dlpgcmpl;
+                wc.DownloadFileCompleted += Wc_DownloadProgressCompleted;
             }
         }
 
-        private void wc_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e) {
+        private void Wc_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e) {
             pg.Value = e.ProgressPercentage;
         }
 
-        void wc_Dlpgcmpl(object sender, AsyncCompletedEventArgs e) {
+        private void Wc_DownloadProgressCompleted(object sender, AsyncCompletedEventArgs e) {
             pg.Height = 0;
             DLBtn.Height = 20;
         }

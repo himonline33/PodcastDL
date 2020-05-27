@@ -16,7 +16,7 @@ namespace SortSøndagDL {
 
         public MainWindow() {
             InitializeComponent();
-            initDLDir();
+            InitializeDLDirectory();
         }
 
         private void OpenFolder(string folderPath) {
@@ -35,7 +35,7 @@ namespace SortSøndagDL {
             SP_epCtrls.Children.Clear();
             text.Text = ""; // clear textbox
 
-            XmlNodeList nodeList = getRSS("channel//item");
+            XmlNodeList nodeList = GetRSS("channel//item");
 
             for (int i = 0; i < 10; i++) {
                 Episode episode = new Episode(this, nodeList[i], i);
@@ -43,7 +43,7 @@ namespace SortSøndagDL {
             }
         }
 
-        private void initDLDir() {
+        private void InitializeDLDirectory() {
             curDir = Directory.GetCurrentDirectory();
             DlPath = curDir + @"\Udsendelser";
             try {
@@ -60,7 +60,7 @@ namespace SortSøndagDL {
             }
         }
 
-        private XmlNodeList getRSS(string selector) {
+        private XmlNodeList GetRSS(string selector) {
             // Load the document and set the root element.  
             XmlDocument doc = new XmlDocument();
             //doc.Load(@"https://www.dr.dk/mu/feed/sort-soendag.xml?format=podcast");
