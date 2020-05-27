@@ -22,7 +22,6 @@ using System.Diagnostics;
 
 namespace SortSøndagDL {
     // TODO: fix date missing month
-    // TODO: move progressbar to dl button
     // TODO: if dl explore window open focus to this instesd of opening new // Difficulty HIGH
     // TODO: next/back arrows for older episodes
     // TODO: when downloading no filetype, when done add filetype. to signify that file was dl incomplete
@@ -32,25 +31,25 @@ namespace SortSøndagDL {
     public class Episode {
         private XmlNode xmlNode;
 
-        public string btnName { get; }
-        private string title { get; }
-        private string downloadUrl { get; }
-        private string pubDate { get; }
+        public string BtnName { get; }
+        private string Title { get; }
+        private string DownloadUrl { get; }
+        private string PubDate { get; }
         public string DT_date { get; }
         private MainWindow mainWindow;
         ProgressBar pg;
         Button epBtn;
         Button DLBtn;
 
-        public Episode(MainWindow mainWindow ,XmlNode xmlNode, int id) {
+        public Episode(MainWindow mainWindow, XmlNode xmlNode, int id) {
             this.mainWindow = mainWindow;
             this.xmlNode = xmlNode;
             
-            btnName = "dlep" + id.ToString();
-            title = this.xmlNode.SelectSingleNode("title").InnerText;
-            downloadUrl = this.xmlNode.SelectSingleNode("enclosure/@url").InnerText;
-            pubDate = this.xmlNode.SelectSingleNode("pubDate").InnerText;
-            DT_date = DateTime.Parse(pubDate).ToString("dd-mm-yyy");
+            BtnName = "dlep" + id.ToString();
+            Title = this.xmlNode.SelectSingleNode("title").InnerText;
+            DownloadUrl = this.xmlNode.SelectSingleNode("enclosure/@url").InnerText;
+            PubDate = this.xmlNode.SelectSingleNode("pubDate").InnerText;
+            DT_date = DateTime.Parse(PubDate).ToString("dd-mm-yyy");
             mainWindow.text.Text += "btn created\n";
 
             addEpisodeBtn();
@@ -59,13 +58,13 @@ namespace SortSøndagDL {
         public void addEpisodeBtn() {
             epBtn = new Button {
                 Content = DT_date,
-                Name = btnName
+                Name = BtnName
             };
             epBtn.Click += new RoutedEventHandler(DLBtn_Click);
             mainWindow.DLSP.Children.Add(epBtn);
 
             pg = new ProgressBar {
-                Name = btnName + "pgb"
+                Name = BtnName + "pgb"
             };
             pg.HorizontalAlignment = HorizontalAlignment.Stretch;
             pg.Height = 0;
@@ -82,13 +81,13 @@ namespace SortSøndagDL {
 
         public void DLBtn_Click(object sender, RoutedEventArgs e) {
             //string btnName = (sender as Button).Name;
-            mainWindow.text.Text += (string.Format("You clicked on the {0}. button. \n", btnName));
-            mainWindow.text.Text = title + "\n";
-            mainWindow.text.Text += downloadUrl + "\n";
+            mainWindow.text.Text += (string.Format("You clicked on the {0}. button. \n", BtnName));
+            mainWindow.text.Text = Title + "\n";
+            mainWindow.text.Text += DownloadUrl + "\n";
         }
 
         private void dlLink(object sender, RoutedEventArgs e) {
-            mainWindow.text.Text = "download " + downloadUrl;
+            mainWindow.text.Text = "download " + DownloadUrl;
             using (WebClient wc = new WebClient()) {                
                 string dlP = mainWindow.DlPath + @"\" + DT_date + ".mp3";
                 mainWindow.text.Text = "Download Path " + dlP;
@@ -97,7 +96,7 @@ namespace SortSøndagDL {
                 DLBtn.Height = 0;
 
                 wc.DownloadProgressChanged += wc_DownloadProgressChanged;
-                wc.DownloadFileAsync(new System.Uri(downloadUrl), dlP);
+                wc.DownloadFileAsync(new System.Uri(DownloadUrl), dlP);
                 wc.DownloadFileCompleted += wc_Dlpgcmpl;
             }
         }
