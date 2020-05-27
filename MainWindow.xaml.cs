@@ -19,30 +19,6 @@ namespace SortSøndagDL {
             InitializeDLDirectory();
         }
 
-        private void OpenFolder(string folderPath) {
-            if (Directory.Exists(folderPath)) {
-                ProcessStartInfo startInfo = new ProcessStartInfo {
-                    Arguments = folderPath,
-                    FileName = "explorer.exe"
-                };
-                Process.Start(startInfo);
-            }
-            else MessageBox.Show(string.Format("{0} Directory does not exist!", folderPath));
-        }
-
-        private void _DL_RSS(object sender, RoutedEventArgs e) {
-            SP_eps.Children.Clear(); // clear stackpannel 
-            SP_epCtrls.Children.Clear();
-            text.Text = ""; // clear textbox
-
-            XmlNodeList nodeList = GetRSS("channel//item");
-
-            for (int i = 0; i < 10; i++) {
-                Episode episode = new Episode(this, nodeList[i], i);
-                eps.Add(episode);                
-            }
-        }
-
         private void InitializeDLDirectory() {
             curDir = Directory.GetCurrentDirectory();
             DlPath = curDir + @"\Udsendelser";
@@ -69,8 +45,32 @@ namespace SortSøndagDL {
             return root.SelectNodes(selector);
         }
 
-        private void _DL_Folder_Click(object sender, RoutedEventArgs e) {
+        private void _Download_RSS(object sender, RoutedEventArgs e) {
+            SP_eps.Children.Clear(); // clear stackpannel 
+            SP_epCtrls.Children.Clear();
+            text.Text = ""; // clear textbox
+
+            XmlNodeList nodeList = GetRSS("channel//item");
+
+            for (int i = 0; i < 10; i++) {
+                Episode episode = new Episode(this, nodeList[i], i);
+                eps.Add(episode);
+            }
+        }
+
+        private void _Download_Folder_Click(object sender, RoutedEventArgs e) {
             OpenFolder(DlPath);
+        }
+
+        private void OpenFolder(string folderPath) {
+            if (Directory.Exists(folderPath)) {
+                ProcessStartInfo startInfo = new ProcessStartInfo {
+                    Arguments = folderPath,
+                    FileName = "explorer.exe"
+                };
+                Process.Start(startInfo);
+            }
+            else MessageBox.Show(string.Format("{0} Directory does not exist!", folderPath));
         }
     }
 

@@ -43,7 +43,7 @@ namespace SortSøndagDL {
                 Content = DT_date,
                 Name = BtnName
             };
-            epBtn.Click += new RoutedEventHandler(_DLBtn_Click);
+            epBtn.Click += new RoutedEventHandler(_ShowEpisodeInfo_Click);
             mainWindow.SP_eps.Children.Add(epBtn);
 
             // Add progess Bar to window, Initially hidden
@@ -64,8 +64,8 @@ namespace SortSøndagDL {
             mainWindow.SP_epCtrls.Children.Add(DLBtn);
         }
 
-        private void _DLBtn_Click(object sender, RoutedEventArgs e) {
-            mainWindow.text.Text += (string.Format("You clicked on the {0}. button. \n", BtnName));
+        private void _ShowEpisodeInfo_Click(object sender, RoutedEventArgs e) {
+            //mainWindow.text.Text += (string.Format("You clicked on the {0}. button. \n", BtnName));
             mainWindow.text.Text = Title + "\n";
             mainWindow.text.Text += DownloadUrl + "\n";
         }
