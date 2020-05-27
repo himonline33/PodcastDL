@@ -28,6 +28,7 @@ namespace SortSøndagDL {
     // TODO: Play button to replace dl button. if file in dir, opens file in mediaplayer
     // TODO: Linkinput field to other RSS sources / split into other dirs
     // TODO: HASH ep description to replace date as unique identifyer
+    // TODO: Split classes into seperate files
     public class Episode {
         private XmlNode xmlNode;
 
