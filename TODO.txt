@@ -1,0 +1,8 @@
+﻿// TODO: fix date missing month
+// TODO: if dl explore window open focus to this instesd of opening new // Difficulty HIGH
+// TODO: next/back arrows for older episodes
+// TODO: when downloading no filetype, when done add filetype. to signify that file was dl incomplete
+// TODO: Play button to replace dl button. if file in dir, opens file in mediaplayer
+// TODO: Linkinput field to other RSS sources / split into other dirs
+// TODO: HASH ep description to replace date as unique identifyer
+// TODO: Split classes into seperate files
