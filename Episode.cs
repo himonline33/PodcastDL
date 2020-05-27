@@ -44,14 +44,14 @@ namespace SortSøndagDL {
                 Name = BtnName
             };
             epBtn.Click += new RoutedEventHandler(DLBtn_Click);
-            mainWindow.DLSP.Children.Add(epBtn);
+            mainWindow.SP_eps.Children.Add(epBtn);
 
             pg = new ProgressBar {
                 Name = BtnName + "pgb"
             };
             pg.HorizontalAlignment = HorizontalAlignment.Stretch;
             pg.Height = 0;
-            mainWindow.epCtrl.Children.Add(pg);
+            mainWindow.SP_epCtrls.Children.Add(pg);
 
             DLBtn = new Button {
                 Content = "Download Udsendelse",
@@ -59,7 +59,7 @@ namespace SortSøndagDL {
             };
             DLBtn.Click += new RoutedEventHandler(dlLink);
 
-            mainWindow.epCtrl.Children.Add(DLBtn);
+            mainWindow.SP_epCtrls.Children.Add(DLBtn);
         }
 
         public void DLBtn_Click(object sender, RoutedEventArgs e) {

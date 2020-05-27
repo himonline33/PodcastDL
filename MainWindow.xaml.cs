@@ -12,12 +12,11 @@ namespace SortSøndagDL {
     public partial class MainWindow : Window {
         public string curDir;
         public string DlPath;
-        public List<Episode> eps;
+        public List<Episode> eps = new List<Episode>();
 
         public MainWindow() {
             InitializeComponent();
             initDLDir();
-            eps = new List<Episode>();
         }
 
         private void OpenFolder(string folderPath) {
@@ -32,8 +31,8 @@ namespace SortSøndagDL {
         }
 
         private void _DL_RSS(object sender, RoutedEventArgs e) {
-            DLSP.Children.Clear(); // clear stackpannel 
-            epCtrl.Children.Clear();
+            SP_eps.Children.Clear(); // clear stackpannel 
+            SP_epCtrls.Children.Clear();
             text.Text = ""; // clear textbox
 
             XmlNodeList nodeList = getRSS("channel//item");
@@ -46,12 +45,10 @@ namespace SortSøndagDL {
 
         private void initDLDir() {
             curDir = Directory.GetCurrentDirectory();
-            //text.Text += curDir + "\n";
             DlPath = curDir + @"\Udsendelser";
             try {
                 if (!Directory.Exists(DlPath)) {
                     Directory.CreateDirectory(DlPath);
-
                     Environment.CurrentDirectory = (DlPath);
                     if (Directory.GetCurrentDirectory() == DlPath) {
                         text.Text += "Path Created: " + DlPath;
@@ -68,9 +65,7 @@ namespace SortSøndagDL {
             XmlDocument doc = new XmlDocument();
             //doc.Load(@"https://www.dr.dk/mu/feed/sort-soendag.xml?format=podcast");
             doc.Load(@"https://www.dr.dk/mu/feed/p3-med-christian-og-maria.xml?format=podcast");
-            XmlNode root = doc.DocumentElement;
-
-            // Select all nodes where the book price is greater than 10.00.  
+            XmlNode root = doc.DocumentElement; 
             return root.SelectNodes(selector);
         }
 

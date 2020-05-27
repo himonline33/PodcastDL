@@ -14,11 +14,11 @@
             <ColumnDefinition Width="4*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0">
-            <Button Content="Download RSS" Click="_DL_RSS" Height="20" VerticalAlignment="Top" HorizontalAlignment="stretch"/>
-            <Button Content="Download Folder" Name="_DL_Folder" Height="20" VerticalAlignment="Top" HorizontalAlignment="Stretch" Click="_DL_Folder_Click"/>
+            <Button Content="Download RSS" Height="20" VerticalAlignment="Top" HorizontalAlignment="stretch" Click="_DL_RSS"/>
+            <Button Content="Download Folder" Height="20" VerticalAlignment="Top" HorizontalAlignment="Stretch" Click="_DL_Folder_Click"/>
         </StackPanel>
-        <StackPanel Name="DLSP" Grid.Column="1"/>
-        <StackPanel Name="epCtrl" Grid.Column="2"/>
+        <StackPanel Name="SP_eps" Grid.Column="1"/>
+        <StackPanel Name="SP_epCtrls" Grid.Column="2"/>
         <TextBox Grid.Column="3" Name="text"/>
         
 
