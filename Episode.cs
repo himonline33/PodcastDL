@@ -32,7 +32,7 @@ namespace SortSøndagDL {
             Title = this.xmlNode.SelectSingleNode("title").InnerText;
             DownloadUrl = this.xmlNode.SelectSingleNode("enclosure/@url").InnerText;
             PubDate = this.xmlNode.SelectSingleNode("pubDate").InnerText;
-            DT_date = DateTime.Parse(PubDate).ToString("dd-mm-yyy");
+            DT_date = DateTime.Parse(PubDate).ToString("dd-mm-yyyy");
 
             AddEpisodeButton();
         }
@@ -76,6 +76,7 @@ namespace SortSøndagDL {
                 string dlP = mainWindow.DlPath + @"\" + DT_date + ".mp3";
                 mainWindow.text.Text = "Download Path " + dlP;
 
+                // Switch download button with progressbar 
                 pg.Height = 20;
                 DLBtn.Height = 0;
 
@@ -86,10 +87,12 @@ namespace SortSøndagDL {
         }
 
         private void Wc_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e) {
+            // update progressbar
             pg.Value = e.ProgressPercentage;
         }
 
         private void Wc_DownloadProgressCompleted(object sender, AsyncCompletedEventArgs e) {
+            //Switch back Download button from progrressbar
             pg.Height = 0;
             DLBtn.Height = 20;
         }

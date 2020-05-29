@@ -4,6 +4,7 @@ using System.Windows;
 using System.Xml;
 using System.IO;
 using System.Diagnostics;
+using RSSParser;
 
 namespace SortSøndagDL {
     /// <summary>
@@ -37,6 +38,8 @@ namespace SortSøndagDL {
         }
 
         private XmlNodeList GetRSS(string selector) {
+            RSSChannel rsc = new RSSChannel(@"https://www.dr.dk/mu/feed/sort-soendag.xml?format=podcast");
+
             // Load the document and set the root element.  
             XmlDocument doc = new XmlDocument();
             //doc.Load(@"https://www.dr.dk/mu/feed/sort-soendag.xml?format=podcast");
