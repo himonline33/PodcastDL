@@ -55,7 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="RSSParser\RSSDateParser.cs" />
+    <Compile Include="RSSParser\RSS.cs" />
     <Compile Include="RSSParser\RSSItem.cs" />
     <Compile Include="RSSParser\RSSChannel.cs" />
     <Page Include="MainWindow.xaml">

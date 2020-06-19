@@ -6,30 +6,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
+using Microsoft.SqlServer.Server;
+using SortSøndagDL;
+using System.Windows.Controls;
+using System.Security.RightsManagement;
 
 namespace RSSParser {
-    class RSSChannel {
+    public class RSSChannel : RSS{
         // RSS 2.0 Specification    https://www.rssboard.org/rss-specification
         // Itunes elments included
 
         // Supported Channel children
 
-
-        // [Required]
-
-        /// Channel/Title        title               
-        /// Channel/Link         link
-        /// Channel/Description  description
-
-
-        // [Optinal]
-
-        /// Channel/Image                image       parent
-        /// Channel/Image/URL            url         Image URL
-        /// Channel/Image/Title          title       Alternative for url
-        /// Channel/Image/Link           link        link for source site
-        /// Channel/Image/Width          width       Optional image width    def 88, max 144
-        /// Channel/Image/height         height      Optional image height   def 31, max 400
         // Channel/Image/itunes:author  
 
         // Channel/Cloud                cloud /      lightweight publish-subscribe protocol
@@ -45,18 +33,6 @@ namespace RSSParser {
         // Channel/Text Input/Title     title           label of the Submit button
         // Channel/Text Input/Name      name            Name of input field
         // Channel/Text Input/Link      link            Link to pass form
-
-        /// Channel/Language             language        language the channel is written in
-        /// Channel/Copyright            copyright       Copyright notice for content in the channel.+
-        /// Channel/Managing Editor      managingEditor  Email address for person responsible for editorial content.
-        /// Channel/Web Master           webMaster       Email address for person responsible for technical issues relating to channel.
-
-        /// Channel/Publication Date     pubDate         The publication date for the content in the channel.   
-        /// Channel/Last Build Date      lastBuildDate   The last time the content of the channel changed.
-        /// Channel/Catagory             catagory        categories that the channel belongs to.
-        /// Channel/Generator            generator       A string indicating the program used to generate the channel.
-        /// Channel/Docs                 docs            A URL that points to the documentation for the format used in the RSS file.
-        // Channel/Rating               rating          The PICS rating for the channel.
 
         // Channel/Skip Hours           skipHours
 
@@ -85,77 +61,73 @@ namespace RSSParser {
         // Channel/itunes:category      itunes:category /
         // Channel/itunes:category@text text
 
+        // [Required]
+        public string Title { get; }                // Channel/Title                title    
+        public string Link { get; }                 // Channel/Link                 link
+        public string Description { get; }          // Channel/Description          description
+        // [Optinal]
+        public string Language { get; }             // Channel/Language             language        language the channel is written in
+        public string Copyright { get; }            // Channel/Copyright            copyright       Copyright notice for content in the channel.+
+        public string ManagingEditor { get; }       // Channel/Managing Editor      managingEditor  Email address for person responsible for editorial content.
+        public string WebMaster { get; }            // Channel/Web Master           webMaster       Email address for person responsible for technical issues relating to channel.
+        public string PubDate { get; }              // Channel/Publication Date     pubDate         The publication date for the content in the channel. 
+        public string LastBuildDate { get; }        // Channel/Last Build Date      lastBuildDate   The last time the content of the channel changed.
+        public string Catagory { get; }             // Channel/Catagory             catagory        categories that the channel belongs to.
+        public string Generator { get; }            // Channel/Generator            generator       A string indicating the program used to generate the channel.
+        public string Docs { get; }                 // Channel/Docs                 docs            A URL that points to the documentation for the format used in the RSS file.
+        public string Rating { get; }               // Channel/Rating               rating          The PICS rating for the channel.
 
-        public string title { get; }
-        public string link { get; }
-        public string description { get; }
-        public string language { get; }
-        public string copyright { get; }
-        public string managingEditor { get; }
-        public string webMaster { get; }
-        public string pubDate { get; }
-        public string lastBuildDate { get; }
-        public string catagory { get; }
-        public string generator { get; }
-        public string docs { get; }
-        public string rating { get; }
-
-        private struct Image {
-            public string uri;
-            public string title;
-            public string link;
-            public int width;
-            public int height;
+        private struct Image {                      // Channel/Image                image       parent
+            public string uri;                      // Channel/Image/URL            url         Image URL
+            public string title;                    // Channel/Image/Title          title       Alternative for url
+            public string link;                     // Channel/Image/Link           link        link for source site
+            public int width;                       // Channel/Image/Width          width       Optional image width    def 88, max 144
+            public int height;                      // Channel/Image/height         height      Optional image height   def 31, max 400
         }
 
-        private XmlDocument xmlDoc;
-        //private string rssUrl;
+        private readonly XmlDocument xmlDoc;
+        private List<RSSItem> RSSItemList;
 
-        //public RSSChannel() {
-        //}
+        XmlNodeList XmlNodes;
 
         public RSSChannel(string rssUrl) {
 
             if (ValidateUrl(rssUrl)) {
-
+                
 
                 xmlDoc = new XmlDocument();
                 xmlDoc.Load(rssUrl);
                 // Load the document and set the root element.  
 
-                XmlNode documentRoot = xmlDoc.DocumentElement;
+                this.xmlNode = xmlDoc.DocumentElement;
 
-                title = SimpleElement(documentRoot,"channel//title");
-                link = SimpleElement(documentRoot, "channel//link");
-                description = SimpleElement(documentRoot, "channel//description");
-                language = SimpleElement(documentRoot, "channel//language");
-                copyright = SimpleElement(documentRoot, "channel//copyright");
-                managingEditor = SimpleElement(documentRoot, "channel//managingEditor");
-                webMaster = SimpleElement(documentRoot, "channel//webMaster");
-                pubDate = SimpleElement(documentRoot, "channel//pubDate");
-                lastBuildDate = SimpleElement(documentRoot, "channel//lastBuildDate");
-                catagory = SimpleElement(documentRoot, "channel//catagory");
-                generator = SimpleElement(documentRoot, "channel//generator");
-                docs = SimpleElement(documentRoot, "channel//docs");
-                rating = SimpleElement(documentRoot, "channel//rating");
+                Title = RSSSimpleElement("channel//title");
+                Link = RSSSimpleElement("channel//link");
+                Description = RSSSimpleElement("channel//description");
+                Language = RSSSimpleElement("channel//language");
+                Copyright = RSSSimpleElement("channel//copyright");
+                ManagingEditor = RSSSimpleElement("channel//managingEditor");
+                WebMaster = RSSSimpleElement("channel//webMaster");
+                PubDate = RSSFormatDate("channel//pubDate", false);
+                LastBuildDate = RSSFormatDate("channel//lastBuildDate", false);
+                Catagory = RSSSimpleElement("channel//catagory");
+                Generator = RSSSimpleElement("channel//generator");
+                Docs = RSSSimpleElement("channel//docs");
+                Rating = RSSSimpleElement("channel//rating");
 
-                string s = string.Format("{0} {1} {2}", title, link, description);
-                MessageBox.Show(s);
+                XmlNodes = this.xmlNode.SelectNodes("channel//item");
+                RSSItemList = new List<RSSItem>();
 
-
+                 
             }
         }
 
-        private string SimpleElement(XmlNode node, string selector) {
-            string text = "";
-            try {
-                text = node.SelectSingleNode(selector).InnerText;
+        public List<RSSItem> GetItemRange(int start, int count) {
+            RSSItemList.Clear();
+            for (int i = start; i < count; i++) {
+                RSSItemList.Add(new RSSItem(XmlNodes[(int)i]));
             }
-            catch (Exception) {
-
-                //throw;
-            }
-            return text;
+            return RSSItemList;
         }
 
         private bool ValidateUrl(string rssUrl) {

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SortSøndagDL", "SortSøndagDL.csproj", "{22D4D69A-2A7D-4CA2-9BB2-8D218F19E249}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Podcast Download", "Podcast Download.csproj", "{22D4D69A-2A7D-4CA2-9BB2-8D218F19E249}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
